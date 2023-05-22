@@ -80,6 +80,20 @@ class DataManager:
                              "email": email}}
             response_sheety_users = requests.post(url=url, headers=SHEETY_HEADERS, json=data)
             response_sheety_users.raise_for_status()
-            print(f"{email} added to the database")
+            self.users_data = self.get_users_data()
+            print(f"{email} added to the database") 
         else:
             print("Entered emails have to be identical.")
+
+    def add_new_destination(self):
+        """This method is responsible for adding new destination City to the Google Sheets"""
+        url = f"{SHEETY_END}/prices"
+        city = input("What city would you like to fly to? \n")
+        max = input("How much do you want to spend maximum?\n")
+        data = {"price": {"city": city,
+                          "iataCode": "",
+                          "lowestPrice": int(max)}}
+        response_sheety_prices = requests.post(url=url, headers=SHEETY_HEADERS, json=data)
+        response_sheety_prices.raise_for_status()
+        self.destination_data = self.get_destination_data()
+        print(f"{city} added to the database")
